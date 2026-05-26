@@ -1,0 +1,366 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 34 100% 64%;
+    --primary-foreground: 34 100% 10%;
+    --secondary: 34 20% 96%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 34 100% 96%;
+    --accent-foreground: 34 100% 64%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 34 100% 64%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 34 100% 64%;
+    --primary-foreground: 34 100% 5%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 34 100% 64%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 34 100% 64%;
+
+    --sidebar-background: 240 10% 3.9%;
+    --sidebar-foreground: 240 5% 64.9%;
+    --sidebar-primary: 34 100% 64%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 5% 98%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 34 100% 64%;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-body antialiased overflow-x-hidden w-full;
+  }
+}
+
+.glass {
+  @apply bg-background/95 backdrop-blur-xl border border-border/50 shadow-2xl;
+}
+
+.dark .glass {
+  @apply bg-zinc-950/90 border-white/10;
+}
+
+/* Universe UI Card Styles */
+.universe-card {
+  width: 100%;
+  border-radius: 20px;
+  background-color: #1b233d;
+  padding: 5px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 7px 20px 0px;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.universe-card:hover {
+  transform: scale(1.02);
+}
+
+.universe-card .top-section {
+  height: 120px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .universe-card .top-section {
+    height: 150px;
+  }
+  .universe-card:hover {
+    transform: scale(1.05);
+  }
+}
+
+.universe-card .top-section .border {
+  border-bottom-right-radius: 10px;
+  height: 30px;
+  width: 130px;
+  background-color: #1b233d;
+  position: relative;
+  transform: skew(-40deg);
+  z-index: 10;
+  margin-left: -20px;
+  box-shadow: -10px -10px 0 0 #1b233d;
+}
+
+.universe-card .top-section .border::before {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 0;
+  right: -15px;
+  background: rgba(255, 255, 255, 0);
+  border-top-left-radius: 10px;
+  box-shadow: -5px -5px 0 2px #1b233d;
+}
+
+.universe-card .top-section::before {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background: rgba(255, 255, 255, 0);
+  height: 15px;
+  width: 15px;
+  border-top-left-radius: 15px;
+  box-shadow: -5px -5px 0 2px #1b233d;
+}
+
+.universe-card .top-section .icons {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+  padding: 0 15px;
+}
+
+.universe-card .top-section .icons .logo {
+  height: 100%;
+  aspect-ratio: 1;
+  padding: 7px 0 7px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.universe-card .top-section .icons .logo .svg {
+  height: 100%;
+}
+
+.universe-card .top-section .icons .social-media {
+  height: 100%;
+  padding: 8px 15px;
+  display: flex;
+  gap: 7px;
+}
+
+.universe-card .top-section .icons .social-media .svg {
+  height: 100%;
+  fill: #1b233d;
+  transition: fill 0.3s ease;
+}
+
+.universe-card .top-section .icons .social-media .svg:hover {
+  fill: white;
+}
+
+.universe-card .bottom-section {
+  margin-top: 10px;
+  padding: 10px 5px;
+}
+
+.universe-card .bottom-section .title {
+  display: block;
+  font-size: 14px;
+  font-weight: bolder;
+  color: white;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .universe-card .bottom-section {
+    margin-top: 15px;
+  }
+  .universe-card .bottom-section .title {
+    font-size: 17px;
+    letter-spacing: 2px;
+  }
+}
+
+.universe-card .bottom-section .row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.universe-card .bottom-section .row .item {
+  flex: 30%;
+  text-align: center;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.universe-card .bottom-section .row .item .big-text {
+  font-size: 10px;
+  display: block;
+  font-weight: 700;
+  color: rgba(170, 222, 243, 0.9);
+}
+
+.universe-card .bottom-section .row .item .regular-text {
+  font-size: 8px;
+  color: rgba(170, 222, 243, 0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .universe-card .bottom-section .row .item .big-text {
+    font-size: 12px;
+  }
+  .universe-card .bottom-section .row .item .regular-text {
+    font-size: 9px;
+  }
+}
+
+.universe-card .bottom-section .row .item:nth-child(2) {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Theme Switch Styles */
+.theme-switch-container {
+  --hue: 223;
+  --trans-dur: 0.3s;
+  --trans-timing: cubic-bezier(0.76,0.05,0.24,0.95);
+  display: flex;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+}
+
+.switch__input {
+  background-color: hsl(210,90%, 70%);
+  border-radius: 0.75em;
+  width: 3em;
+  height: 1.5em;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+  transition: background-color var(--trans-dur) var(--trans-timing);
+}
+
+.switch__input:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: hsl(50,90%,50%);
+  border-radius: inherit;
+  mask-image: linear-gradient(120deg,hsl(0,0%,0%) 20%,hsla(0,0%,0%,0) 80%);
+  -webkit-mask-image: linear-gradient(120deg,hsl(0,0%,0%) 20%,hsla(0,0%,0%,0) 80%);
+  transition: background-color var(--trans-dur);
+}
+
+.switch__input:after {
+  content: "";
+  position: absolute;
+  top: 0.125em;
+  left: 0.125em;
+  width: 1.25em;
+  height: 1.25em;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform var(--trans-dur) var(--trans-timing);
+  z-index: 1;
+}
+
+.switch__input:checked {
+  background-color: #ffb149;
+}
+
+.switch__input:checked:before {
+  background-color: #ffb149;
+}
+
+.switch__input:checked:after {
+  transform: translateX(1.5em);
+  background-color: #000;
+}
+
+.switch__icon {
+  position: absolute;
+  top: 0.375em;
+  right: 0.375em;
+  width: 0.75em;
+  height: 0.75em;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.switch__input:checked ~ .switch__icon--light {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.switch__icon--dark {
+  opacity: 0;
+  transform: scale(0.5);
+  left: 0.375em;
+  right: auto;
+}
+
+.switch__input:checked ~ .switch__icon--dark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.switch__sr {
+  @apply sr-only;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.1);
+}

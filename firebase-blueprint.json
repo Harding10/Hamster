@@ -1,0 +1,135 @@
+
+{
+  "entities": {
+    "Note": {
+      "title": "Note",
+      "description": "Une note technique ou un mémo de développement.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "link": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "isFavorite": { "type": "boolean" },
+        "template": { "type": "string", "enum": ["daily", "bug", "api", "none"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["title", "description", "userId"]
+    },
+    "Bug": {
+      "title": "Bug",
+      "description": "Un ticket de bug technique.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "priority": { "type": "string", "enum": ["basse", "moyenne", "haute", "critique"] },
+        "status": { "type": "string", "enum": ["backlog", "todo", "in-progress", "resolved"] },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "priority", "status", "userId"]
+    },
+    "Snippet": {
+      "title": "Snippet",
+      "description": "Un extrait de code réutilisable.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "code": { "type": "string" },
+        "language": { "type": "string" },
+        "category": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "code", "language", "userId"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "Un événement dans l'agenda.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["title", "date", "userId"]
+    },
+    "Addiction": {
+      "title": "Addiction",
+      "description": "Suivi de comportement personnel.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "lastRelapseDate": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["name", "startDate", "userId"]
+    },
+    "Folder": {
+      "title": "Folder",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "parentId": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["name", "userId"]
+    },
+    "File": {
+      "title": "File",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "url": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["name", "url", "userId"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Une notification système ou utilisateur.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["info", "success", "warning", "error"] },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["title", "message", "userId", "read"]
+    },
+    "Bookmark": {
+      "title": "Bookmark",
+      "description": "Un lien web sauvegardé.",
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "url": { "type": "string" },
+        "category": { "type": "string" },
+        "userId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["label", "url", "userId"]
+    }
+  },
+  "auth": {
+    "providers": ["google.com", "password"]
+  },
+  "firestore": {
+    "/notes/{noteId}": { "schema": "Note", "description": "Notes personnelles" },
+    "/bugs/{bugId}": { "schema": "Bug", "description": "Suivi des bugs" },
+    "/snippets/{snippetId}": { "schema": "Snippet", "description": "Coffre-fort de code" },
+    "/events/{eventId}": { "schema": "Event", "description": "Agenda personnel" },
+    "/addictions/{addictionId}": { "schema": "Addiction", "description": "Suivi d'habitudes" },
+    "/folders/{folderId}": { "schema": "Folder", "description": "Dossiers" },
+    "/files/{fileId}": { "schema": "File", "description": "Fichiers" },
+    "/notifications/{notificationId}": { "schema": "Notification", "description": "Notifications utilisateur" },
+    "/bookmarks/{bookmarkId}": { "schema": "Bookmark", "description": "Ressources web sauvegardées" }
+  }
+}

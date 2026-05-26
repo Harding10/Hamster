@@ -1,0 +1,60 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Fonction utilitaire pour vérifier l'appartenance
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Règles pour les notes
+    match /notes/{noteId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règles pour les bugs
+    match /bugs/{bugId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règles pour les snippets
+    match /snippets/{snippetId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règles pour les événements
+    match /events/{eventId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règles pour les addictions/habitudes
+    match /addictions/{addictionId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règles pour les dossiers et fichiers
+    match /folders/{folderId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+    
+    match /files/{fileId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règles pour les notifications
+    match /notifications/{notificationId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règles pour les favoris/liens
+    match /bookmarks/{bookmarkId} {
+      allow read, write: if isOwner(resource.data.userId) || (request.method == 'create' && isOwner(request.resource.data.userId));
+    }
+
+    // Règle par défaut : accès interdit
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

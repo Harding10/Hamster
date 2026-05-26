@@ -1,0 +1,11 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "site-logo",
+      "description": "Logo de l'application : un petit hamster orange mignon",
+      "imageUrl": "https://picsum.photos/seed/orange-hamster/200/200",
+      "imageHint": "orange hamster"
+    }
+  ]
+}
