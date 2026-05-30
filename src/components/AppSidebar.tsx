@@ -92,7 +92,7 @@ export function AppSidebar() {
         <Link href="/" className="flex items-center gap-3 w-full group">
           <div className="h-12 w-12 flex items-center justify-center relative overflow-hidden shrink-0">
             <Image 
-              src="/icon.png" 
+              src="/logo.png" 
               alt="QbLog Logo" 
               width={48}
               height={48}

@@ -4,12 +4,12 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { 
-  getAuth, 
   signInWithPopup, 
   GoogleAuthProvider, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword 
 } from "firebase/auth"
+import { useAuth } from "@/firebase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
@@ -20,7 +20,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images"
 
 export default function LoginPage() {
   const router = useRouter()
-  const auth = getAuth()
+  const auth = useAuth()
   const { toast } = useToast()
   
   const [email, setEmail] = React.useState("")
@@ -70,7 +70,7 @@ export default function LoginPage() {
         <CardHeader className="text-center space-y-4 pt-10">
           <div className="mx-auto h-24 w-24 rounded-3xl bg-primary/10 border border-primary/20 flex items-center justify-center relative mb-4 overflow-hidden shadow-2xl">
             <Image 
-              src="/icon.png" 
+              src="/logo.png" 
               alt="QbLog Logo" 
               width={80}
               height={80}

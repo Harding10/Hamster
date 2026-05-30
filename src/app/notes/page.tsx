@@ -9,12 +9,13 @@ import {
   Wand2,
   ArrowLeft,
   Plus,
-  Book
+  Book,
+  Trash2
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useFirestore, useUser, useDoc, useCollection } from "@/firebase"
-import { collection, addDoc, serverTimestamp, doc, updateDoc, query, where, orderBy } from "firebase/firestore"
+import { collection, addDoc, serverTimestamp, doc, updateDoc, deleteDoc, query, where, orderBy } from "firebase/firestore"
 import { useToast } from "@/hooks/use-toast"
 import { errorEmitter } from "@/firebase/error-emitter"
 import { FirestorePermissionError } from "@/firebase/errors"
@@ -37,6 +38,7 @@ export default function JournalPage() {
   
   const [isSaving, setIsSaving] = React.useState(false)
   const [isAiLoading, setIsAiLoading] = React.useState(false)
+  const [isDeleting, setIsDeleting] = React.useState(false)
   const [title, setTitle] = React.useState("")
   const editorRef = React.useRef<MDXEditorMethods>(null)
 
@@ -115,6 +117,21 @@ export default function JournalPage() {
       errorEmitter.emit('permission-error', new FirestorePermissionError({ path: 'notes', operation: selectedId ? 'update' : 'create', requestResourceData: data }))
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!db || !selectedId) return
+    if (!confirm("Voulez-vous vraiment supprimer cette note ?")) return
+    setIsDeleting(true)
+    try {
+      await deleteDoc(doc(db, "notes", selectedId))
+      toast({ title: "Note supprimée", description: "La note a été retirée de votre bibliothèque." })
+      router.push('/notes')
+    } catch (e) {
+      toast({ variant: "destructive", title: "Erreur", description: "Impossible de supprimer la note." })
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -205,6 +222,11 @@ export default function JournalPage() {
               />
            </div>
            <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
+              {selectedId && (
+                <Button variant="outline" size="sm" className="h-8 md:h-9 border-none text-red-500 bg-red-500/5 hover:bg-red-500/10 rounded-lg px-2 md:px-3" onClick={handleDelete} disabled={isDeleting}>
+                  {isDeleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
+                </Button>
+              )}
               <Button variant="outline" size="sm" className="h-8 md:h-9 border-none text-blue-500 bg-blue-500/5 hover:bg-blue-500/10 rounded-lg px-2 md:px-3" onClick={handleAiFormat} disabled={isAiLoading}>
                 <Wand2 className={cn("h-3.5 w-3.5 md:mr-2", isAiLoading && "animate-spin")} />
                 <span className="hidden sm:inline">IA</span>
