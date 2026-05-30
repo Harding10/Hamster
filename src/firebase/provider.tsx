@@ -9,6 +9,7 @@ interface FirebaseContextType {
   app: FirebaseApp;
   db: Firestore;
   auth: Auth;
+  getMessaging: () => any;
 }
 
 const FirebaseContext = createContext<FirebaseContextType | null>(null);
@@ -17,15 +18,17 @@ export function FirebaseProvider({
   children, 
   app, 
   db, 
-  auth 
+  auth,
+  getMessaging
 }: { 
   children: React.ReactNode;
   app: FirebaseApp;
   db: Firestore;
   auth: Auth;
+  getMessaging: () => any;
 }) {
   return (
-    <FirebaseContext.Provider value={{ app, db, auth }}>
+    <FirebaseContext.Provider value={{ app, db, auth, getMessaging }}>
       {children}
     </FirebaseContext.Provider>
   );
@@ -40,3 +43,4 @@ export function useFirebase() {
 export const useFirebaseApp = () => useFirebase().app;
 export const useFirestore = () => useFirebase().db;
 export const useAuth = () => useFirebase().auth;
+export const useMessaging = () => useFirebase().getMessaging;

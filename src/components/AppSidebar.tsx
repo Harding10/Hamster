@@ -47,6 +47,7 @@ import {
 } from "firebase/auth"
 import Image from "next/image"
 import { useToast } from "@/hooks/use-toast"
+import { useAgendaReminders } from "@/hooks/use-agenda-reminders"
 import { cn } from "@/lib/utils"
 import { PlaceHolderImages } from "@/lib/placeholder-images"
 
@@ -68,6 +69,9 @@ export function AppSidebar() {
   const { user } = useUser()
   const auth = useAuth()
   const { toast } = useToast()
+
+  // Déclencher la vérification de l'agenda
+  useAgendaReminders()
 
   const [displayName, setDisplayName] = React.useState("")
   const [photoURL, setPhotoURL] = React.useState("")

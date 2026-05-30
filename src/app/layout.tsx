@@ -13,8 +13,19 @@ export const metadata: Metadata = {
   title: 'QbLog | Second Cerveau pour Développeurs',
   description: 'Organisez vos extraits de code, vos bugs et vos connaissances dans un espace de travail futuriste.',
   icons: {
-    icon: '/icon.png',
-  }
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'QbLog',
+  },
+};
+
+export const viewport = {
+  themeColor: '#000000',
 };
 
 export default function RootLayout({

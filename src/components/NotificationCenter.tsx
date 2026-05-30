@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useFirestore, useCollection, useUser } from "@/firebase"
+import { usePushNotifications } from "@/hooks/use-push-notifications"
 import { 
   collection, 
   query, 
@@ -32,6 +33,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 export function NotificationCenter() {
   const db = useFirestore()
   const { user } = useUser()
+  const { permission, requestPermission } = usePushNotifications()
 
   const q = React.useMemo(() => {
     if (!db || !user) return null
@@ -111,6 +113,15 @@ export function NotificationCenter() {
           )}
         </DropdownMenuLabel>
         
+        {permission === "default" && (
+          <div className="p-3 bg-blue-500/10 border-b border-blue-500/20 flex flex-col gap-2">
+            <span className="text-xs text-blue-400 font-medium">Ne manquez rien avec les notifications Push.</span>
+            <Button size="sm" onClick={requestPermission} className="h-7 text-[10px] bg-blue-500 hover:bg-blue-600 text-white font-bold w-full">
+              Activer les alertes
+            </Button>
+          </div>
+        )}
+
         <ScrollArea className="h-[350px]">
           {notifications && notifications.length > 0 ? (
             <div className="flex flex-col">

@@ -58,6 +58,7 @@ export default function AgendaPage() {
   
   const [title, setTitle] = React.useState("")
   const [desc, setDesc] = React.useState("")
+  const [time, setTime] = React.useState("12:00")
   const [viewMode, setViewMode] = React.useState<'month' | 'list'>('month')
 
   // Auto-switch to list view on small screens
@@ -91,10 +92,15 @@ export default function AgendaPage() {
   const handleCreateEvent = () => {
     if (!db || !user || !title.trim() || !selectedDate) return
     
+    const [hours, minutes] = time.split(':')
+    const finalDate = new Date(selectedDate)
+    finalDate.setHours(parseInt(hours, 10))
+    finalDate.setMinutes(parseInt(minutes, 10))
+
     const eventData = {
       title: title.trim(),
       description: desc.trim(),
-      date: selectedDate.toISOString(),
+      date: finalDate.toISOString(),
       userId: user.uid,
       createdAt: serverTimestamp()
     }
@@ -103,7 +109,7 @@ export default function AgendaPage() {
       .then(() => {
         toast({ title: "Événement planifié" })
         setIsAdding(false)
-        setTitle(""); setDesc("")
+        setTitle(""); setDesc(""); setTime("12:00")
       })
       .catch(e => errorEmitter.emit('permission-error', new FirestorePermissionError({ path: 'events', operation: 'create', requestResourceData: eventData })))
   }
@@ -136,6 +142,7 @@ export default function AgendaPage() {
 
   const handleDayClick = (day: Date) => {
     setSelectedDate(day)
+    setTime("12:00")
     setIsAdding(true)
   }
 
@@ -175,7 +182,7 @@ export default function AgendaPage() {
           </div>
           <Button 
             className="bg-white text-black font-bold h-10 rounded-xl px-4 md:px-6 shadow-xl border-none shrink-0"
-            onClick={() => { setSelectedDate(new Date()); setIsAdding(true); }}
+            onClick={() => { setSelectedDate(new Date()); setTime(format(new Date(), "HH:mm")); setIsAdding(true); }}
           >
             <Plus className="mr-2 h-4 w-4" /> Planifier
           </Button>
@@ -315,6 +322,15 @@ export default function AgendaPage() {
                 value={title} 
                 onChange={e => setTitle(e.target.value)} 
                 className="bg-white/5 border-white/10 h-11 md:h-12 rounded-xl focus:ring-blue-500/20 border-none" 
+              />
+            </div>
+            <div className="space-y-1.5 md:space-y-2">
+              <label className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Heure</label>
+              <Input 
+                type="time"
+                value={time} 
+                onChange={e => setTime(e.target.value)} 
+                className="bg-white/5 border-white/10 h-11 md:h-12 rounded-xl focus:ring-blue-500/20 border-none w-full sm:w-max" 
               />
             </div>
             <div className="space-y-1.5 md:space-y-2">

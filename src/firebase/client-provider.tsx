@@ -18,6 +18,7 @@ export function FirebaseClientProvider({ children }: { children: React.ReactNode
       app={firebase.app} 
       db={firebase.db} 
       auth={firebase.auth}
+      getMessaging={firebase.getMessaging}
     >
       {children}
     </FirebaseProvider>
