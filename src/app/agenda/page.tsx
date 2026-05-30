@@ -24,6 +24,13 @@ import {
   DialogFooter,
   DialogDescription
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { useFirestore, useCollection, useUser } from "@/firebase"
 import { collection, addDoc, serverTimestamp, query, where, orderBy, deleteDoc, doc } from "firebase/firestore"
 import { useToast } from "@/hooks/use-toast"
@@ -59,6 +66,7 @@ export default function AgendaPage() {
   const [title, setTitle] = React.useState("")
   const [desc, setDesc] = React.useState("")
   const [time, setTime] = React.useState("12:00")
+  const [reminderOffset, setReminderOffset] = React.useState("0")
   const [viewMode, setViewMode] = React.useState<'month' | 'list'>('month')
 
   // Auto-switch to list view on small screens
@@ -101,6 +109,8 @@ export default function AgendaPage() {
       title: title.trim(),
       description: desc.trim(),
       date: finalDate.toISOString(),
+      reminderOffset: parseInt(reminderOffset, 10),
+      status: 'pending',
       userId: user.uid,
       createdAt: serverTimestamp()
     }
@@ -109,7 +119,7 @@ export default function AgendaPage() {
       .then(() => {
         toast({ title: "Événement planifié" })
         setIsAdding(false)
-        setTitle(""); setDesc(""); setTime("12:00")
+        setTitle(""); setDesc(""); setTime("12:00"); setReminderOffset("0")
       })
       .catch(e => errorEmitter.emit('permission-error', new FirestorePermissionError({ path: 'events', operation: 'create', requestResourceData: eventData })))
   }
@@ -143,6 +153,7 @@ export default function AgendaPage() {
   const handleDayClick = (day: Date) => {
     setSelectedDate(day)
     setTime("12:00")
+    setReminderOffset("0")
     setIsAdding(true)
   }
 
@@ -182,7 +193,7 @@ export default function AgendaPage() {
           </div>
           <Button 
             className="bg-white text-black font-bold h-10 rounded-xl px-4 md:px-6 shadow-xl border-none shrink-0"
-            onClick={() => { setSelectedDate(new Date()); setTime(format(new Date(), "HH:mm")); setIsAdding(true); }}
+            onClick={() => { setSelectedDate(new Date()); setTime(format(new Date(), "HH:mm")); setReminderOffset("0"); setIsAdding(true); }}
           >
             <Plus className="mr-2 h-4 w-4" /> Planifier
           </Button>
@@ -324,14 +335,30 @@ export default function AgendaPage() {
                 className="bg-white/5 border-white/10 h-11 md:h-12 rounded-xl focus:ring-blue-500/20 border-none" 
               />
             </div>
-            <div className="space-y-1.5 md:space-y-2">
-              <label className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Heure</label>
-              <Input 
-                type="time"
-                value={time} 
-                onChange={e => setTime(e.target.value)} 
-                className="bg-white/5 border-white/10 h-11 md:h-12 rounded-xl focus:ring-blue-500/20 border-none w-full sm:w-max" 
-              />
+            <div className="flex flex-col sm:flex-row gap-4 w-full">
+              <div className="space-y-1.5 md:space-y-2 flex-1">
+                <label className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Heure</label>
+                <Input 
+                  type="time"
+                  value={time} 
+                  onChange={e => setTime(e.target.value)} 
+                  className="bg-white/5 border-white/10 h-11 md:h-12 rounded-xl focus:ring-blue-500/20 border-none w-full" 
+                />
+              </div>
+              <div className="space-y-1.5 md:space-y-2 flex-1">
+                <label className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Rappel</label>
+                <Select value={reminderOffset} onValueChange={setReminderOffset}>
+                  <SelectTrigger className="w-full h-11 md:h-12 bg-white/5 border-none rounded-xl text-white">
+                    <SelectValue placeholder="Sélectionner un rappel" />
+                  </SelectTrigger>
+                  <SelectContent className="glass border-white/10 text-white rounded-xl">
+                    <SelectItem value="0">À l'heure exacte</SelectItem>
+                    <SelectItem value="15">15 min avant</SelectItem>
+                    <SelectItem value="60">1 heure avant</SelectItem>
+                    <SelectItem value="1440">1 jour avant</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="space-y-1.5 md:space-y-2">
               <label className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1">Description / Détails</label>

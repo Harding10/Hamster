@@ -23,3 +23,31 @@ messaging.onBackgroundMessage(function(payload) {
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  
+  if (event.action) {
+    event.waitUntil(
+      clients.matchAll({ type: 'window' }).then(clientList => {
+        for (const client of clientList) {
+          client.postMessage({
+            type: 'AGENDA_ACTION',
+            action: event.action,
+            eventId: event.notification.data.eventId
+          });
+        }
+      })
+    );
+  } else {
+    event.waitUntil(
+      clients.matchAll({ type: 'window' }).then(clientList => {
+        if (clientList.length > 0) {
+          clientList[0].focus();
+        } else {
+          clients.openWindow('/agenda');
+        }
+      })
+    );
+  }
+});
